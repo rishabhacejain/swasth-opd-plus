@@ -84,6 +84,136 @@ main {
     font-weight: bold;
 }
 
+.calendar-wrapper {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+    font-family: 'Poppins', sans-serif;
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.calendar-month-year {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.calendar-nav {
+    font-size: 20px;
+    color: #888;
+    cursor: pointer;
+}
+
+.calendar-days,
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.calendar-days div {
+    font-size: 13px;
+    color: #999;
+    font-weight: 500;
+    padding: 8px 0;
+}
+
+.calendar-grid div {
+    height: 45px;
+    line-height: 45px;
+    margin: 3px;
+    font-size: 14px;
+    border-radius: 8px;
+    color: #333;
+    position: relative;
+}
+
+.calendar-grid .current-day {
+    background-color: #d1eaff;
+    border: 2px solid #007bff;
+    font-weight: 600;
+}
+
+.calendar-grid .event-day::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: red;
+    border-radius: 50%;
+    bottom: 6px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.calendar-grid .other-month {
+    color: #ccc;
+}
+
+/* Events Section */
+.calendar-events-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 25px;
+    font-weight: 500;
+}
+
+.view-all {
+    font-size: 13px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.calendar-event {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.event-icon {
+    width: 36px;
+    height: 36px;
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 36px;
+    margin-right: 10px;
+}
+
+.event-info small {
+    color: #555;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .calendar-grid div {
+        height: 40px;
+        line-height: 40px;
+        font-size: 13px;
+    }
+
+    .calendar-month-year {
+        font-size: 16px;
+    }
+
+    .event-icon {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+    }
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
     .sidebar {

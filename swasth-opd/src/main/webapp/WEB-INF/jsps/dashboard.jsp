@@ -28,8 +28,10 @@
             <h4 class="text-center my-4">SWASTH OPD+</h4>
             <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
             <a href="/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
+            <a href="/view-patients"><i class="bi bi-people-fill me-2"></i> View Patients</a>
             <a href="/lab-request"><i class="bi bi-cloud-arrow-down"></i>Lab Requests</a>
             <a href="/refer-patient"><i class="bi bi-arrow-right-circle me-2"></i>Referrals</a>
+            <a href="/history"><i class="bi bi-clock-history me-2"></i> History</a>
             <a href="/logout" class="mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
         </nav>
 
@@ -65,6 +67,8 @@
                     </div>
                 </div>
             </div>
+            
+            
 
             <!-- Patient List & Consultation -->
             <div class="row mb-4">
@@ -127,7 +131,43 @@
                 <div class="col-md-6">
                     <div class="card-box">
                         <h5>Calendar</h5>
-                        <p>Upcoming: Monthly doctor’s meet at 4 PM</p>
+                        <div class="calendar-wrapper">
+    <h5>Calendar</h5>
+    <p>Upcoming: Monthly doctor’s meet at 4 PM</p>
+
+    <!-- Calendar Header -->
+    <div class="calendar-header">
+        <span class="calendar-nav" onclick="changeMonth(-1)"><i class="bi bi-chevron-left"></i></span>
+        <span class="calendar-month-year" id="monthYear">September 2022</span>
+        <span class="calendar-nav" onclick="changeMonth(1)"><i class="bi bi-chevron-right"></i></span>
+    </div>
+
+    <!-- Days of Week -->
+    <div class="calendar-days">
+        <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div>
+        <div>THU</div><div>FRI</div><div>SAT</div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid" id="calendarGrid">
+        <!-- JavaScript will populate this -->
+    </div>
+
+    <!-- Upcoming Events -->
+    <div class="calendar-events-header">
+        <span>Upcoming Events</span>
+        <a href="#" class="view-all">View All</a>
+    </div>
+
+    <div class="calendar-event">
+        <div class="event-icon">M</div>
+        <div class="event-info">
+            <strong>Monthly doctor’s meet</strong><br>
+            <small>4 PM, 28 Sep</small>
+        </div>
+    </div>
+</div>
+
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -140,5 +180,71 @@
         </main>
     </div>
 </div>
+
+<script>
+    const calendarGrid = document.getElementById("calendarGrid");
+    const monthYear = document.getElementById("monthYear");
+    let currentDate = new Date();
+
+    const eventDates = [7, 8, 21, 22, 28]; // example event days
+
+    function renderCalendar(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
+        const today = new Date();
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+        const totalCells = 42; // 6 weeks
+        calendarGrid.innerHTML = "";
+
+        monthYear.innerText = date.toLocaleString("default", { month: "long" }) + " " + year;
+
+        for (let i = 0; i < totalCells; i++) {
+            const dayCell = document.createElement("div");
+            let dayNum, isCurrentMonth = true;
+
+            if (i < firstDay) {
+                dayNum = daysInPrevMonth - firstDay + i + 1;
+                isCurrentMonth = false;
+            } else if (i >= firstDay + daysInMonth) {
+                dayNum = i - (firstDay + daysInMonth) + 1;
+                isCurrentMonth = false;
+            } else {
+                dayNum = i - firstDay + 1;
+            }
+
+            dayCell.innerText = dayNum;
+
+            if (!isCurrentMonth) {
+                dayCell.classList.add("other-month");
+            }
+
+            if (
+                isCurrentMonth &&
+                dayNum === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear()
+            ) {
+                dayCell.classList.add("current-day");
+            }
+
+            if (eventDates.includes(dayNum) && isCurrentMonth) {
+                dayCell.classList.add("event-day");
+            }
+
+            calendarGrid.appendChild(dayCell);
+        }
+    }
+
+    function changeMonth(offset) {
+        currentDate.setMonth(currentDate.getMonth() + offset);
+        renderCalendar(currentDate);
+    }
+
+    renderCalendar(currentDate);
+</script>
+
 </body>
 </html>
