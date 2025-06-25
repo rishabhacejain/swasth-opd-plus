@@ -1,0 +1,49 @@
+package com.swasthopd.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import com.swasthopd.model.Doctor;
+import com.swasthopd.repo.DoctorRepo;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class LoginController {
+	
+	@Autowired
+	private DoctorRepo doctorRepo;
+	
+	@GetMapping("/login")
+	public String loginPage() {
+		return "login";
+		
+	}
+	
+	@PostMapping("/login")
+    public String doLogin(@RequestParam String username,
+    		              @RequestParam String password,
+    		              @RequestParam String role,
+    		              HttpSession session,
+    		              Model model) {
+    	
+    	Doctor doctor = doctorRepo.findByUsernameAndPassword(username, password);
+    	
+    	if(doctor != null && doctor.getRole().equalsIgnoreCase(role)) {
+    		session.setAttribute("loggedInDoctor", doctor);
+    		return "redirect:/dashboard";
+    	}else {
+    		model.addAttribute("err", "Invalid Username or Passwod");
+    		
+    		return "login";
+    	}
+    	
+    	
+    	
+    	
+    }
+	
+
+}
