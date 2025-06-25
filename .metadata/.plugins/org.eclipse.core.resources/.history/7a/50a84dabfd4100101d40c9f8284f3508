@@ -1,5 +1,0 @@
-package com.swasthopd.repo;
-
-public interface DoctorRepo {
-
-}
