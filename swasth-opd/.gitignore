@@ -47,4 +47,5 @@ logs/
 Thumbs.db
 
 
-../.metadata/
+.metadata/
+
