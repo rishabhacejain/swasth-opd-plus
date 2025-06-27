@@ -1,0 +1,68 @@
+<%@ page import="com.swasthopd.model.User" %>
+<%
+    User doctor = (User) session.getAttribute("loggedInUser");
+%>
+
+<form action="/register-patient" method="post">
+    <div class="row g-3">
+        <!-- Left Column -->
+        <div class="col-md-6">
+            <label>Patient Name</label>
+            <input type="text" name="name" class="form-control" required>
+
+            <label class="mt-3">Age</label>
+            <input type="number" name="age" class="form-control" required>
+
+            <label class="mt-3">Gender</label><br>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
+                <label class="form-check-label" for="male">Male</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="female" value="Female">
+                <label class="form-check-label" for="female">Female</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="other" value="Other">
+                <label class="form-check-label" for="other">Other</label>
+            </div>
+
+            <label class="mt-3">Phone</label>
+            <input type="text" name="phone" class="form-control" required>
+
+            <label class="mt-3">Visit Time</label>
+            <input type="text" name="visitTime" class="form-control" value="<%= visitTime %>" readonly>
+        </div>
+
+        <!-- Right Column -->
+        <div class="col-md-6">
+            <label>Address</label>
+            <textarea name="address" class="form-control" rows="2" required></textarea>
+
+            <label class="mt-3">Symptoms / Complaint</label>
+            <textarea name="symptoms" class="form-control" rows="2"></textarea>
+
+            <label class="mt-3">Case Type</label>
+            <select name="caseType" class="form-select" required>
+                <option value="">Select</option>
+                <option>Elective</option>
+                <option>Emergency</option>
+            </select>
+
+            <label class="mt-3">Department</label>
+            <select name="department" class="form-select" required>
+                <option>General</option>
+                <option>ENT</option>
+                <option>Ortho</option>
+            </select>
+
+            <label class="mt-3">Doctor</label>
+            <input type="text" name="doctor" class="form-control" value="<%= doctor != null ? doctor.getName() : "" %>" readonly>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="reset" class="btn btn-outline-secondary">Reset</button>
+    </div>
+</form>

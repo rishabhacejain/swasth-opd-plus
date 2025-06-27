@@ -1,0 +1,23 @@
+package com.swasthopd.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.swasthopd.model.User;
+import com.swasthopd.repo.UserRepo;
+
+@Service
+public class UserService {
+	
+	@Autowired
+	private UserRepo userRepo;
+
+	public User login(String username, String password) {
+		
+		return userRepo.findByUsernameAndPassword(username, password);
+	}
+
+	public void save(User user) {
+		userRepo.save(user);
+	}
+}

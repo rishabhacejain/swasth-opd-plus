@@ -22,12 +22,20 @@
         <!-- Login Form -->
         <div class="login-form">
             <h2>Welcome Back</h2>
-            <c:if test="${not empty error}">
-    <div class="alert alert-danger">${error}</div>
-</c:if>
+            <!-- Success Message -->
+       <c:if test="${not empty msg}">
+       <div class="alert alert-success">${msg}</div>
+       </c:if>
+
+             <!-- Error Message -->
+       <c:if test="${not empty error}">
+       <div class="alert alert-danger">${err}</div>
+        </c:if>
+            
             
             <form action="/login" method="post">
                 <!-- Username -->
+                
                 <div class="form-group">
                     <label for="username">Username</label>
                     <div class="input-icon">
@@ -95,16 +103,28 @@
 
 <!-- JavaScript for selecting role -->
 <script>
+    const loginBtn = document.querySelector('.login-btn');
     const roleCards = document.querySelectorAll('.role-card');
     const selectedRole = document.getElementById('selectedRole');
 
+    if (loginBtn) {
+        loginBtn.disabled = true;
+    }
+    
     roleCards.forEach(card => {
         card.addEventListener('click', () => {
             roleCards.forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
             selectedRole.value = card.getAttribute('data-role');
+            
+            if (loginBtn && selectedRole.value) {
+                loginBtn.disabled = false;
+        }  
+      
         });
     });
+    
+        
 </script>
 </body>
 </html>

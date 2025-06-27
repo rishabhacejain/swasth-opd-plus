@@ -1,7 +1,6 @@
 package com.swasthopd.model;
 
 import jakarta.persistence.*;
-import java.time.LocalTime;
 
 @Entity
 @Table(name = "patients")
@@ -14,61 +13,140 @@ public class Patient {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "reason")
-    private String reason;
+    @Column(name = "age")
+    private Integer age;
+
+    @Column(name = "gender")
+    private String gender;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "phone")
+    private String phone;
 
     @Column(name = "visit_time")
-    private String time; // You can use LocalTime if preferred
+    private String visitTime;
+
+    @Column(name = "symptoms")
+    private String symptoms;
+
+    @Column(name = "case_type")
+    private String caseType;
+
+    @Column(name = "department")
+    private String department;
+
+    @Column(name = "doctor")
+    private String doctor;
 
     @Column(name = "status")
     private String status; // e.g. "Checked-In", "Waiting", "Referred"
-    
-    
-    
-    
-    
+
     // Constructors
-    public Patient( ) {}
+    public Patient() {}
 
-	public Patient(String name, String reason, String time, String status) {
-		super();
-		this.name = name;
-		this.reason = reason;
-		this.time = time;
-		this.status = status;
-	}
-	
-	//Getters And Setters
-	public Long getId() {
-		return id;
-	}
+    public Patient(String name, int age, String gender, String address, String phone,
+                   String visitTime, String symptoms, String caseType,
+                   String department, String doctor, String status) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.address = address;
+        this.phone = phone;
+        this.visitTime = visitTime;
+        this.symptoms = symptoms;
+        this.caseType = caseType;
+        this.department = department;
+        this.doctor = doctor;
+        this.status = status;
+    }
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    // Getters and Setters (generate or copy as needed)
+    // ...
 
-	public String getName() {
-		return name;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getReason() {
-		return reason;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setReason(String reason) {
-		this.reason = reason;
-	}
-
-	public String getTime() {
-		return time;
+	public int getAge() {
+		return age;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getVisitTime() {
+		return visitTime;
+	}
+
+	public void setVisitTime(String visitTime) {
+		this.visitTime = visitTime;
+	}
+
+	public String getSymptoms() {
+		return symptoms;
+	}
+
+	public void setSymptoms(String symptoms) {
+		this.symptoms = symptoms;
+	}
+
+	public String getCaseType() {
+		return caseType;
+	}
+
+	public void setCaseType(String caseType) {
+		this.caseType = caseType;
+	}
+
+	public String getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(String department) {
+		this.department = department;
+	}
+
+	public String getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(String doctor) {
+		this.doctor = doctor;
 	}
 
 	public String getStatus() {
@@ -78,7 +156,4 @@ public class Patient {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-    
-    
-    
 }

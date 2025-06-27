@@ -1,0 +1,5 @@
+package com.swasthopd.repo;
+
+public interface UserRepo {
+
+}

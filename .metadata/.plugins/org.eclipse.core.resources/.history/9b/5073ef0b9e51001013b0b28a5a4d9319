@@ -1,0 +1,14 @@
+package com.swasthopd.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@Controller
+public class DoctorController {
+	
+	 @GetMapping	("/dashboard")
+	    public String showDashboard() {
+	        return "dashboard"; // points to dashboard.jsp
+	    }
+
+}

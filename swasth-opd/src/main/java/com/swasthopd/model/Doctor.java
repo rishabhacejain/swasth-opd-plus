@@ -8,42 +8,35 @@ import jakarta.persistence.*;
 @Table(name="doctor")
 public class Doctor {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="DocID")
-	private int docID;
-	
-	@Column(name="username", unique = true)
-	private String username;
-	
-	@Column(name="password")
-	private String password;
-	
-	@Column(name="role")
-	private String role;
-	
-	@Column(name="email")
-	private String email;
-	
-	@Column(name="name")
-	private String name;
-	
-	@Column(name="contact_number")
-	private String contactNumber;
-	
-	@Column(name="department")
-	private String department;
-	
-	@Column(name="status")
-	private String status; // ACTIVE / INACTIVE / ON_LEAVE
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_at", updatable = false)
-	private Date createdAt;
+	  @Id
+	    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	    @Column(name="DocID")
+	    private int docID;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_at")
-	private Date updatedAt;
+	    @Column(name="name")
+	    private String name;
+
+	    @Column(name="email")
+	    private String email;
+
+	    @Column(name="contact_number")
+	    private String contactNumber;
+
+	    @Column(name="department")
+	    private String department;
+
+	    @Temporal(TemporalType.TIMESTAMP)
+	    @Column(name = "created_at", updatable = false)
+	    private Date createdAt;
+
+	    @Temporal(TemporalType.TIMESTAMP)
+	    @Column(name = "updated_at")
+	    private Date updatedAt;
+
+	    // Optional: link to User if needed
+	    @OneToOne
+	    @JoinColumn(name = "user_id") // FK in doctor table
+	    private User user;
 
 
 	public int getDocID() {
@@ -70,21 +63,9 @@ public class Doctor {
 		this.email = email;
 	}
 
-	public String getPassword() {
-		return password;
-	}
+	
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
+	
 
 	public String getDepartment() {
 		return department;
@@ -94,13 +75,7 @@ public class Doctor {
 		this.department = department;
 	}
 
-	public String getUsername() {
-		return username;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
+	
 
 	public String getContactNumber() {
 		return contactNumber;
@@ -110,13 +85,7 @@ public class Doctor {
 		this.contactNumber = contactNumber;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	
 
 	public Date getCreatedAt() {
 		return createdAt;

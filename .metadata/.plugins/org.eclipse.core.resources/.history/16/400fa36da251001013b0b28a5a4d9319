@@ -1,0 +1,5 @@
+package com.swasthopd.service;
+
+public class PatientService {
+
+}

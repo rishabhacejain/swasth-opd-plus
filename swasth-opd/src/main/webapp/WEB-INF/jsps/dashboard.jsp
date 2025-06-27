@@ -1,10 +1,11 @@
+<%@page import="com.swasthopd.model.User"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
 <%@ page import="com.swasthopd.model.Patient" %>
-<%@ page import="com.swasthopd.model.Doctor" %>
+
 
 <%
-    Doctor doctor = (Doctor) request.getAttribute("doctor");
+    User doctor = (User) request.getAttribute("doctor");
     List<Patient> patients = (List<Patient>) request.getAttribute("patients");
 %>
 
@@ -96,10 +97,10 @@
                                     </div>
                                     <div>
                                         <strong><%= p.getName() %></strong><br>
-                                        <small class="text-muted"><%= p.getReason() %></small>
+                                        <small class="text-muted"><%= p.getSymptoms()%></small>
                                     </div>
                                 </div>
-                                <span class="badge bg-light text-dark"><%= p.getTime() %></span>
+                                <span class="badge bg-light text-dark"><%= p.getVisitTime()%></span>
                             </li>
                             <% } %>
                         </ul>

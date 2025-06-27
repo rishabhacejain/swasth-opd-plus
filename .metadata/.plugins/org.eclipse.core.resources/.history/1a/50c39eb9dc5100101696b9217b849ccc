@@ -1,0 +1,5 @@
+package com.swasthopd.controller;
+
+public class PatientController {
+
+}

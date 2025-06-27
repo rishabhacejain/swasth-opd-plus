@@ -1,0 +1,33 @@
+package com.swasthopd.controller;
+
+import java.util.List;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+
+import com.swasthopd.model.Doctor;
+
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class DoctorController {
+	
+//	 @GetMapping	("/dashboard")
+//	    public String showDashboard() {
+//	        return "dashboard"; // points to dashboard.jsp
+//	    }
+	 
+	 @GetMapping("/dashboard")
+	 public String showDashboard(Model model, HttpSession session) {
+	     Doctor doctor = (Doctor) session.getAttribute("loggedInDoctor");
+
+//	     List<Patient> patients = patientService.getTodayPatients();
+
+	     model.addAttribute("doctor", doctor);
+//	     model.addAttribute("patients", patients);
+	     return "dashboard";
+	 }
+
+
+}

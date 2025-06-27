@@ -6,7 +6,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.swasthopd.model.Doctor;
+import com.swasthopd.model.User;
 import com.swasthopd.repo.DoctorRepo;
+import com.swasthopd.service.UserService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -14,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 public class LoginController {
 	
 	@Autowired
-	private DoctorRepo doctorRepo;
+	private UserService userService;
 	
 	@GetMapping("/login")
 	public String loginPage() {
@@ -28,19 +30,29 @@ public class LoginController {
     		              @RequestParam String role,
     		              HttpSession session,
     		              Model model) {
+		System.out.println("Role from DB: " + username + ", Role from form: " + role);
+
+    	User user = userService.login(username, password);
     	
-    	Doctor doctor = doctorRepo.findByUsernameAndPassword(username, password);
-    	
-    	if(doctor != null && doctor.getRole().equalsIgnoreCase(role)) {
-    		session.setAttribute("loggedInDoctor", doctor);
-    		return "redirect:/dashboard";
+    	if(user != null && user.getRole().equalsIgnoreCase(role)) {
+    		session.setAttribute("loggedInUser", user);
+    		
+    		switch(role.toUpperCase()) {
+    		case "DOCTOR": return "redirect:/dashboard";
+    		case "NURSE": return "redirect:/nurse-dashboard";
+    		case "LAB":   return "redirect:/lab-dashboard";
+    		case "ADMIN": return "redirect:/admin/panel";
+    		default: return "redirect:/login";
+
+    		
+    		}
+    		
     	}else {
     		model.addAttribute("err", "Invalid Username or Passwod");
-    		
     		return "login";
+    	
+    	
     	}
-    	
-    	
     	
     	
     }
