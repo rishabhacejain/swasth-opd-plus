@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.swasthopd.model.Patient;
+import com.swasthopd.model.Visit;
 import com.swasthopd.service.PatientService;
+import com.swasthopd.service.VisitService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -25,6 +27,9 @@ public class PatientController {
 
     @Autowired
     private PatientService patientService;
+    
+    @Autowired
+    private VisitService visitService;
 
     // Show patient registration form
     @GetMapping("/register-patient")
@@ -34,54 +39,63 @@ public class PatientController {
         }
 
         model.addAttribute("patient", new Patient());
-        List<Patient> recent = patientService.getRecentPatients();
-        model.addAttribute("recentPatients", recent);
+        model.addAttribute("recentPatients", patientService.getRecentPatients());
 
         return "register-patient";
     }
 
-    // Register new patient
     @PostMapping("/register-patient")
     public String registerPatient(@ModelAttribute Patient patient,
                                   @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
-                                  RedirectAttributes redirectAttributes,Model model) {
-    	System.out.println("DOB Received: " + patient.getDob());
+                                  @RequestParam("symptoms") String symptoms,
+                                  @RequestParam("caseType") String caseType,
+                                  @RequestParam("department") String department,
+                                  @RequestParam("doctor") String doctor,
+                                  RedirectAttributes redirectAttributes) {
 
-        // Set default status
-        patient.setStatus("Waiting");
-        
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        patient.setVisitTime(LocalDateTime.now().format(formatter));
-        
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        String formattedDob = patient.getDob().format(dateFormatter);
-        model.addAttribute("formattedDob", formattedDob);
+        Patient existing = patientService.findByAadharId(patient.getAadharId());
 
-
-        // Handle image upload if available
-        if (imageFile != null && !imageFile.isEmpty()) {
-            try {
-                String filename = "patient_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
-                Path filepath = Paths.get(UPLOAD_DIR, filename);
-                Files.createDirectories(filepath.getParent());
-                Files.write(filepath, imageFile.getBytes());
-
-                patient.setImageUrl("/uploads/" + filename);
-            } catch (IOException e) {
-                e.printStackTrace();
-                redirectAttributes.addFlashAttribute("error", "Image upload failed");
-            }
+        Patient savedPatient;
+        if (existing != null) {
+            savedPatient = existing; // Use existing patient
         } else {
-            // Set default image if not uploaded
-            patient.setImageUrl("/images/default-avatar.png");
+            // Handle image upload
+            if (imageFile != null && !imageFile.isEmpty()) {
+                try {
+                    String filename = "patient_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+                    Path filepath = Paths.get(UPLOAD_DIR, filename);
+                    Files.createDirectories(filepath.getParent());
+                    Files.write(filepath, imageFile.getBytes());
+
+                    patient.setImageUrl("/uploads/" + filename);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("error", "Image upload failed");
+                }
+            } else {
+                patient.setImageUrl("/images/default-avatar.png");
+            }
+
+            patient.setCreatedAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            savedPatient = patientService.save(patient); // Save new patient
         }
 
-        // Save patient
-        patientService.save(patient);
-        redirectAttributes.addFlashAttribute("msg", "Patient registered successfully");
+        // Create visit
+        Visit visit = new Visit();
+        visit.setPatient(savedPatient);
+        visit.setVisitTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        visit.setSymptoms(symptoms);
+        visit.setCaseType(caseType);
+        visit.setDepartment(department);
+        visit.setDoctor(doctor);
+        visit.setStatus("Waiting");
 
+        visitService.save(visit);
+
+        redirectAttributes.addFlashAttribute("msg", "Patient visit recorded successfully");
         return "redirect:/register-patient";
     }
+
 
     // View all patients
     @GetMapping("/view-patients")
@@ -90,10 +104,17 @@ public class PatientController {
             return "redirect:/login";
         }
 
-        List<Patient> patients = patientService.getTodayPatients(); // Show only today’s patients
-        model.addAttribute("patients", patients);
+        List<Visit> visits = visitService.getTodayVisits(); // Not patientService
+        model.addAttribute("visits", visits);
         return "view-patients";
     }
+    
+    @GetMapping("/patient/aadhar/{aadharId}")
+    @ResponseBody
+    public Patient getPatientByAadhar(@PathVariable String aadharId) {
+        return patientService.findByAadharId(aadharId);
+    }
+
 
     // Get patient profile via AJAX
     @GetMapping("/patient/{id}")
@@ -105,8 +126,8 @@ public class PatientController {
     // Medical history modal content (optional if loading separately)
     @GetMapping("/patient/{id}/history")
     public String showMedicalHistory(@PathVariable Long id, Model model) {
-        Patient patient = patientService.getPatientById(id);
-        model.addAttribute("history", patient.getSymptoms()); // Replace with actual history list if available
+        List<Visit> history = visitService.getVisitsByPatientId(id);
+        model.addAttribute("history", history); // Replace with actual history list if available
         return "fragments/patient-history :: historyModalContent";
     }
 

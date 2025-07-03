@@ -3,6 +3,7 @@ package com.swasthopd.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Entity
 @Table(name = "patients")
@@ -24,7 +25,7 @@ public class Patient {
     @Column(name = "dob")
     private LocalDate dob;
 
-    @Column(name = "aadhar_id")
+    @Column(name = "aadhar_id", unique = true)
     private String aadharId;
 
     @Column(name = "address")
@@ -33,23 +34,7 @@ public class Patient {
     @Column(name = "phone")
     private String phone;
 
-    @Column(name = "visit_time")
-    private String visitTime;
-
-    @Column(name = "symptoms")
-    private String symptoms;
-
-    @Column(name = "case_type")
-    private String caseType;
-
-    @Column(name = "department")
-    private String department;
-
-    @Column(name = "doctor")
-    private String doctor;
-
-    @Column(name = "status")
-    private String status;
+    
 
     // Optional future-use fields
     @Column(name = "image_url")
@@ -57,13 +42,18 @@ public class Patient {
 
     @Column(name = "created_at")
     private String createdAt;
+    
+    
+    
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Visit> visits;
+
 
     public Patient() {
     }
 
     public Patient(String name, int age, String gender, LocalDate dob, String aadharId, String address, String phone,
-                   String visitTime, String symptoms, String caseType,
-                   String department, String doctor, String status, String imageUrl, String createdAt) {
+                   String imageUrl, String createdAt) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -71,26 +61,26 @@ public class Patient {
         this.aadharId = aadharId;
         this.address = address;
         this.phone = phone;
-        this.visitTime = visitTime;
-        this.symptoms = symptoms;
-        this.caseType = caseType;
-        this.department = department;
-        this.doctor = doctor;
-        this.status = status;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
     }
 
     // Getters and Setters
     public Long getId() {
-        return id;
-    }
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
+	public void setName(String name) {
         this.name = name;
     }
 
@@ -142,53 +132,7 @@ public class Patient {
         this.phone = phone;
     }
 
-    public String getVisitTime() {
-        return visitTime;
-    }
-
-    public void setVisitTime(String visitTime) {
-        this.visitTime = visitTime;
-    }
-
-    public String getSymptoms() {
-        return symptoms;
-    }
-
-    public void setSymptoms(String symptoms) {
-        this.symptoms = symptoms;
-    }
-
-    public String getCaseType() {
-        return caseType;
-    }
-
-    public void setCaseType(String caseType) {
-        this.caseType = caseType;
-    }
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
-
-    public String getDoctor() {
-        return doctor;
-    }
-
-    public void setDoctor(String doctor) {
-        this.doctor = doctor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+  
 
     public String getImageUrl() {
         return imageUrl;
@@ -206,10 +150,25 @@ public class Patient {
         this.createdAt = createdAt;
     }
     
+    public List<Visit> getVisits() {
+		return visits;
+	}
+
+	public void setVisits(List<Visit> visits) {
+		this.visits = visits;
+	}
+    
     @Transient
     public String getDobFormatted() {
         if (dob == null) return "";
         return dob.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
+    
+    @Transient
+    public String getMaskedAadharId() {
+        if (aadharId == null || aadharId.length() < 4) return "XXXX XXXX";
+        return "XXXX XXXX " + aadharId.substring(aadharId.length() - 4);
+    }
+
 
 }

@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.swasthopd.model.Patient;
 import com.swasthopd.model.User;
+import com.swasthopd.model.Visit;
 import com.swasthopd.service.PatientService;
+import com.swasthopd.service.VisitService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,7 +20,7 @@ import jakarta.servlet.http.HttpSession;
 public class DoctorController {
 	
 	@Autowired
-	private PatientService patientService;
+	private VisitService visitService;
 
 	
 //	 @GetMapping	("/dashboard")
@@ -33,10 +35,10 @@ public class DoctorController {
 	         return "redirect:/login"; // fallback if session expired
 	     }
 
-	     List<Patient> patients = patientService.getTodayPatients();
-
+	     List<Visit> visits = visitService.getTodayVisits();
 	     model.addAttribute("doctor", doctor);
-	     model.addAttribute("patients", patients);
+	     model.addAttribute("visits", visits);
+
 	     return "dashboard";
 	 }
 
