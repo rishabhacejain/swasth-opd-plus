@@ -1,6 +1,8 @@
 package com.swasthopd.model;
 
 import jakarta.persistence.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "patients")
@@ -18,6 +20,12 @@ public class Patient {
 
     @Column(name = "gender")
     private String gender;
+
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Column(name = "aadhar_id")
+    private String aadharId;
 
     @Column(name = "address")
     private String address;
@@ -41,17 +49,26 @@ public class Patient {
     private String doctor;
 
     @Column(name = "status")
-    private String status; // e.g. "Checked-In", "Waiting", "Referred"
+    private String status;
 
-    // Constructors
-    public Patient() {}
+    // Optional future-use fields
+    @Column(name = "image_url")
+    private String imageUrl;
 
-    public Patient(String name, int age, String gender, String address, String phone,
+    @Column(name = "created_at")
+    private String createdAt;
+
+    public Patient() {
+    }
+
+    public Patient(String name, int age, String gender, LocalDate dob, String aadharId, String address, String phone,
                    String visitTime, String symptoms, String caseType,
-                   String department, String doctor, String status) {
+                   String department, String doctor, String status, String imageUrl, String createdAt) {
         this.name = name;
         this.age = age;
         this.gender = gender;
+        this.dob = dob;
+        this.aadharId = aadharId;
         this.address = address;
         this.phone = phone;
         this.visitTime = visitTime;
@@ -60,11 +77,11 @@ public class Patient {
         this.department = department;
         this.doctor = doctor;
         this.status = status;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
     }
 
-    // Getters and Setters (generate or copy as needed)
-    // ...
-
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -77,83 +94,122 @@ public class Patient {
         this.name = name;
     }
 
-	public int getAge() {
-		return age;
-	}
+    public Integer getAge() {
+        return age;
+    }
 
-	public void setAge(int age) {
-		this.age = age;
-	}
+    public void setAge(Integer age) {
+        this.age = age;
+    }
 
-	public String getGender() {
-		return gender;
-	}
+    public String getGender() {
+        return gender;
+    }
 
-	public void setGender(String gender) {
-		this.gender = gender;
-	}
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public LocalDate getDob() {
+        return dob;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public void setDob(LocalDate dob) {
+        this.dob = dob;
+    }
 
-	public String getPhone() {
-		return phone;
-	}
+    public String getAadharId() {
+        return aadharId;
+    }
 
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
+    public void setAadharId(String aadharId) {
+        this.aadharId = aadharId;
+    }
 
-	public String getVisitTime() {
-		return visitTime;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public void setVisitTime(String visitTime) {
-		this.visitTime = visitTime;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public String getSymptoms() {
-		return symptoms;
-	}
+    public String getPhone() {
+        return phone;
+    }
 
-	public void setSymptoms(String symptoms) {
-		this.symptoms = symptoms;
-	}
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
 
-	public String getCaseType() {
-		return caseType;
-	}
+    public String getVisitTime() {
+        return visitTime;
+    }
 
-	public void setCaseType(String caseType) {
-		this.caseType = caseType;
-	}
+    public void setVisitTime(String visitTime) {
+        this.visitTime = visitTime;
+    }
 
-	public String getDepartment() {
-		return department;
-	}
+    public String getSymptoms() {
+        return symptoms;
+    }
 
-	public void setDepartment(String department) {
-		this.department = department;
-	}
+    public void setSymptoms(String symptoms) {
+        this.symptoms = symptoms;
+    }
 
-	public String getDoctor() {
-		return doctor;
-	}
+    public String getCaseType() {
+        return caseType;
+    }
 
-	public void setDoctor(String doctor) {
-		this.doctor = doctor;
-	}
+    public void setCaseType(String caseType) {
+        this.caseType = caseType;
+    }
 
-	public String getStatus() {
-		return status;
-	}
+    public String getDepartment() {
+        return department;
+    }
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(String doctor) {
+        this.doctor = doctor;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(String createdAt) {
+        this.createdAt = createdAt;
+    }
+    
+    @Transient
+    public String getDobFormatted() {
+        if (dob == null) return "";
+        return dob.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+    }
+
 }

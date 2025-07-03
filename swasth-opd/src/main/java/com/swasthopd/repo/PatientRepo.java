@@ -9,4 +9,10 @@ import com.swasthopd.model.Patient;
 public interface PatientRepo extends JpaRepository<Patient, Long> {
 List<Patient> findAll();
 List<Patient> findTop5ByOrderByIdDesc(); // For recent registrations
+List<Patient> findAllByOrderByIdDesc();
+List<Patient> findByVisitTimeStartingWithOrderByIdDesc(String datePrefix);
+List<Patient> findByVisitTimeContainingOrderByIdDesc(String dateSubstring);
+
+
+
 }
