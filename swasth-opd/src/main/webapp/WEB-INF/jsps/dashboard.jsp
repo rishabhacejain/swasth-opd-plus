@@ -1,12 +1,35 @@
 <%@page import="com.swasthopd.model.User"%>
+<%@page import="com.swasthopd.model.Visit"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="java.util.List"%>
-<%@ page import="com.swasthopd.model.Visit"%>
+<%@ page import="java.util.*"%>
+<%@ page import="java.time.*"%>
+<%@ page import="java.time.format.DateTimeFormatter"%>
 
 <%
     User doctor = (User) request.getAttribute("doctor");
     List<Visit> visits = (List<Visit>) request.getAttribute("visits");
+
+    int newPatients = 0;
+    int oldPatients = 0;
+
+    Set<Long> countedPatients = new HashSet<>();
+
+    for (Visit v : visits) {
+        Long patientId = v.getPatient().getId();
+
+        if (!countedPatients.contains(patientId)) {
+            countedPatients.add(patientId);
+
+            List<Visit> allVisits = v.getPatient().getVisits();
+            if (allVisits != null && allVisits.size() > 1) {
+                oldPatients++;
+            } else {
+                newPatients++;
+            }
+        }
+    }
 %>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -27,11 +50,11 @@
         <nav class="col-md-2 sidebar d-flex flex-column">
             <h4 class="text-center my-4">SWASTH OPD+</h4>
             <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-            <a href="/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
-            <a href="/view-patients"><i class="bi bi-people-fill me-2"></i> View Patients</a>
-            <a href="/lab-request"><i class="bi bi-cloud-arrow-down me-2"></i>Lab Requests</a>
-            <a href="/refer-patient"><i class="bi bi-arrow-right-circle me-2"></i>Referrals</a>
-            <a href="/history"><i class="bi bi-clock-history me-2"></i>History</a>
+            <a href="/patient/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
+            <a href="/patient/view-patients"><i class="bi bi-people-fill me-2"></i> View Patients</a>
+            <a href="/patient/lab-request"><i class="bi bi-cloud-arrow-down me-2"></i>Lab Requests</a>
+            <a href="/patient/refer-patient"><i class="bi bi-arrow-right-circle me-2"></i>Referrals</a>
+            <a href="/patient/history"><i class="bi bi-clock-history me-2"></i>History</a>
             <a href="/logout" class="mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
         </nav>
 
@@ -46,6 +69,32 @@
                 </div>
             </div>
 
+            <!-- Aadhar Search Panel -->
+            <div class="card-box p-4 mb-4">
+                <h5 class="mb-3">Search Patient by Aadhar</h5>
+                <div class="d-flex gap-3 align-items-center">
+                    <input type="text" id="searchAadhar" maxlength="12" class="form-control" placeholder="Enter 12-digit Aadhar ID" style="width: 250px;">
+                    <button class="btn btn-primary" onclick="searchByAadhar()">Search</button>
+                </div>
+
+                <div id="searchResult" class="mt-3 d-none">
+                    <div class="card p-3">
+                        <h6 class="mb-2">Patient Found:</h6>
+                        <p><strong>Patient ID:</strong> <span id="resultPatientId">—</span></p>
+                        <p><strong>Masked Aadhar:</strong> <span id="maskedAadhar">—</span></p>
+                        <div class="mt-2">
+                            <button class="btn btn-success" onclick="registerVisit()">Register Visit</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="notFound" class="mt-3 d-none">
+                    <div class="alert alert-warning">
+                        No patient found. <button class="btn btn-outline-primary btn-sm" onclick="openRegisterPage()">Register New Patient</button>
+                    </div>
+                </div>
+            </div>
+
             <!-- Summary Cards -->
             <div class="row mb-4">
                 <div class="col-md-4">
@@ -57,13 +106,13 @@
                 <div class="col-md-4">
                     <div class="card-box text-center">
                         <h6 class="text-muted">New Patients</h6>
-                        <h2 class="fw-bold text-success">—</h2>
+                        <h2 class="fw-bold text-success"><%= newPatients %></h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card-box text-center">
                         <h6 class="text-muted">Old Patients</h6>
-                        <h2 class="fw-bold text-danger">—</h2>
+                        <h2 class="fw-bold text-danger"><%= oldPatients %></h2>
                     </div>
                 </div>
             </div>
@@ -118,6 +167,9 @@
                                 int age = recent.getPatient().getAge();
                                 String gender = recent.getPatient().getGender();
                                 String recentSymptoms = recent.getSymptoms();
+                                String observation = recent.getObservation() != null ? recent.getObservation() : "—";
+                                String prescription = recent.getPrescription() != null ? recent.getPrescription() : "—";
+                                String comments = recent.getAdditionalComment() != null ? recent.getAdditionalComment() : "—";
                         %>
                         <div class="d-flex align-items-center mb-3">
                             <div class="rounded-circle bg-info text-white d-flex justify-content-center align-items-center me-3"
@@ -131,52 +183,12 @@
                         </div>
                         <p><strong>Last Checked:</strong> <%= recent.getVisitTime() %></p>
                         <p><strong>Symptoms:</strong> <%= recentSymptoms %></p>
-                        <p><strong>Observation:</strong> —</p>
-                        <p><strong>Prescription:</strong> —</p>
+                        <p><strong>Observation:</strong> <%= observation %></p>
+                        <p><strong>Prescription:</strong> <%= prescription %></p>
+                        <p><strong>Additional Comments:</strong> <%= comments %></p>
                         <% } else { %>
                             <p class="text-muted">No consultations yet today.</p>
                         <% } %>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Calendar & News -->
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card-box">
-                        <h5>Calendar</h5>
-                        <p>Upcoming: Monthly doctor’s meet at 4 PM</p>
-                        <div class="calendar-wrapper">
-                            <div class="calendar-header">
-                                <span class="calendar-nav" onclick="changeMonth(-1)"><i class="bi bi-chevron-left"></i></span>
-                                <span class="calendar-month-year" id="monthYear">September 2025</span>
-                                <span class="calendar-nav" onclick="changeMonth(1)"><i class="bi bi-chevron-right"></i></span>
-                            </div>
-                            <div class="calendar-days">
-                                <div>SUN</div><div>MON</div><div>TUE</div><div>WED</div>
-                                <div>THU</div><div>FRI</div><div>SAT</div>
-                            </div>
-                            <div class="calendar-grid" id="calendarGrid"></div>
-                            <div class="calendar-events-header">
-                                <span>Upcoming Events</span>
-                                <a href="#" class="view-all">View All</a>
-                            </div>
-                            <div class="calendar-event">
-                                <div class="event-icon">M</div>
-                                <div class="event-info">
-                                    <strong>Monthly doctor’s meet</strong><br>
-                                    <small>4 PM, 28 Jul</small>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- News Section -->
-                <div class="col-md-6">
-                    <div class="card-box">
-                        <h5>Updates</h5>
-                        <p>No recent updates available</p>
                     </div>
                 </div>
             </div>
@@ -184,59 +196,46 @@
     </div>
 </div>
 
-<!-- Calendar Script -->
 <script>
-    const calendarGrid = document.getElementById("calendarGrid");
-    const monthYear = document.getElementById("monthYear");
-    let currentDate = new Date();
-
-    const eventDates = [7, 8, 21, 22, 28]; // example events
-
-    function renderCalendar(date) {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const today = new Date();
-        const firstDay = new Date(year, month, 1).getDay();
-        const daysInMonth = new Date(year, month + 1, 0).getDate();
-        const daysInPrevMonth = new Date(year, month, 0).getDate();
-
-        const totalCells = 42;
-        calendarGrid.innerHTML = "";
-        monthYear.innerText = date.toLocaleString("default", { month: "long" }) + " " + year;
-
-        for (let i = 0; i < totalCells; i++) {
-            const dayCell = document.createElement("div");
-            let dayNum, isCurrentMonth = true;
-
-            if (i < firstDay) {
-                dayNum = daysInPrevMonth - firstDay + i + 1;
-                isCurrentMonth = false;
-            } else if (i >= firstDay + daysInMonth) {
-                dayNum = i - (firstDay + daysInMonth) + 1;
-                isCurrentMonth = false;
-            } else {
-                dayNum = i - firstDay + 1;
-            }
-
-            dayCell.innerText = dayNum;
-            if (!isCurrentMonth) dayCell.classList.add("other-month");
-            if (isCurrentMonth && dayNum === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
-                dayCell.classList.add("current-day");
-            }
-            if (eventDates.includes(dayNum) && isCurrentMonth) {
-                dayCell.classList.add("event-day");
-            }
-            calendarGrid.appendChild(dayCell);
-        }
+function searchByAadhar() {
+    const aadhar = document.getElementById("searchAadhar").value.trim();
+    if (aadhar.length !== 12) {
+        alert("Enter a valid 12-digit Aadhar number");
+        return;
     }
 
-    function changeMonth(offset) {
-        currentDate.setMonth(currentDate.getMonth() + offset);
-        renderCalendar(currentDate);
-    }
+    fetch(`/patient/aadhar/` + aadhar)
+        .then(res => {
+            if (!res.ok) throw new Error("Not Found");
+            return res.json();
+        })
+        .then(patient => {
+            if (!patient || !patient.aadharId) throw new Error("Not Found");
 
-    renderCalendar(currentDate);
+            const masked = "XXXX XXXX " + patient.aadharId.slice(-4);
+            const rmId = "RM" + (100000 + patient.id);
+
+            document.getElementById("resultPatientId").innerText = rmId;
+            document.getElementById("maskedAadhar").innerText = masked;
+
+            document.getElementById("searchResult").classList.remove("d-none");
+            document.getElementById("notFound").classList.add("d-none");
+
+            sessionStorage.setItem("searchAadhar", aadhar);
+            sessionStorage.setItem("patientId", patient.id);
+        })
+        .catch(err => {
+            document.getElementById("searchResult").classList.add("d-none");
+            document.getElementById("notFound").classList.remove("d-none");
+        });
+}
+
+function openRegisterPage() {
+    window.location.href = "/patient/register-patient";
+}
+function registerVisit() {
+    window.location.href = "/patient/register-patient";
+}
 </script>
-
 </body>
 </html>

@@ -1,5 +1,7 @@
 package com.swasthopd.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 
@@ -14,10 +16,13 @@ public class Visit {
 	
 	@ManyToOne
 	@JoinColumn(name = "patient_id") // FK column in visit table
+	@JsonIgnore
 	private Patient patient;
 
-	
-	
+	@ManyToOne
+	@JoinColumn(name = "doctor_id")
+	private Doctor doctor;
+
 	
 
 	@Column(name = "visit_time")
@@ -32,11 +37,45 @@ public class Visit {
     @Column(name = "department")
     private String department;
 
-    @Column(name = "doctor")
-    private String doctor;
+    @Column(name = "doctor_name")
+    private String doctorName;
 
     @Column(name = "status")
     private String status;
+    
+    @Column(name = "observation" ,columnDefinition = "TEXT")
+    private String observation;
+
+    @Column(name = "prescription" ,columnDefinition = "TEXT")
+    private String prescription;
+
+    @Column(name = "additional_comments", columnDefinition = "TEXT")
+    private String additionalComment;
+    
+
+	public String getObservation() {
+		return observation;
+	}
+
+	public void setObservation(String observation) {
+		this.observation = observation;
+	}
+
+	public String getPrescription() {
+		return prescription;
+	}
+
+	public void setPrescription(String prescription) {
+		this.prescription = prescription;
+	}
+
+	public String getAdditionalComment() {
+		return additionalComment;
+	}
+
+	public void setAdditionalComment(String additionalComment) {
+		this.additionalComment = additionalComment;
+	}
 
 	public Long getId() {
 		return id;
@@ -78,12 +117,16 @@ public class Visit {
 		this.department = department;
 	}
 
-	public String getDoctor() {
-		return doctor;
+	
+
+	
+
+	public String getDoctorName() {
+		return doctorName;
 	}
 
-	public void setDoctor(String doctor) {
-		this.doctor = doctor;
+	public void setDoctorName(String doctorName) {
+		this.doctorName = doctorName;
 	}
 
 	public String getStatus() {
@@ -99,5 +142,13 @@ public class Visit {
 
 	public void setPatient(Patient patient) {
 		this.patient = patient;
+	}
+	
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
 	}
 }

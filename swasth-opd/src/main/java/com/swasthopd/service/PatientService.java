@@ -3,6 +3,7 @@ package com.swasthopd.service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class PatientService {
     }
 
 
+    
+    
     // Save new patient
     public Patient save(Patient patient) {
         return patientRepo.save(patient);
@@ -38,20 +41,25 @@ public class PatientService {
 
     
 
+    
     // Get all patients in descending order
     public List<Patient> getAllPatients() {
         return patientRepo.findAllByOrderByIdDesc();
     }
 
+    
+    
     // Get last 5 registered patients
     public List<Patient> getRecentPatients() {
         return patientRepo.findTop5ByOrderByIdDesc();
     }
+    
 
     // Get patient by ID (used in AJAX & modal)
     public Patient getPatientById(Long id) {
         return patientRepo.findById(id).orElse(null);
     }
+    
 
     // (Optional Future) Get patient medical history
     public List<String> getPatientHistory(Long id) {
@@ -61,5 +69,19 @@ public class PatientService {
     public Patient findByAadharId(String aadharId) {
         return patientRepo.findByAadharId(aadharId).orElse(null);
     }
+
+
+	public static Optional<Patient> getPatientByIdOptional(Long patientId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	public boolean isReturningPatient(Long patientId) {
+	    String todayDate = LocalDate.now().toString(); // "yyyy-MM-dd"
+	    return visitRepo.existsByPatientIdAndVisitTimeBefore(patientId, todayDate);
+	}
+
+
 
 }

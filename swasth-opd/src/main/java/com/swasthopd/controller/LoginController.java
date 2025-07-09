@@ -48,7 +48,7 @@ public class LoginController {
     		}
     		
     	}else {
-    		model.addAttribute("err", "Invalid Username or Passwod");
+    		model.addAttribute("err", "Invalid Username or Password");
     		return "login";
     	
     	

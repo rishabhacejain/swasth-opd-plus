@@ -23,8 +23,8 @@
         <nav class="col-md-2 sidebar d-flex flex-column">
             <h4 class="text-center my-4">SWASTH OPD+</h4>
             <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-            <a href="/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
-            <a href="/view-patients" class="active"><i class="bi bi-people-fill me-2"></i>View Patients</a>
+            <a href="/patient/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
+            <a href="/patient/view-patients" class="active"><i class="bi bi-people-fill me-2"></i>View Patients</a>
             <a href="/lab-reports"><i class="bi bi-flask me-2"></i>Lab Reports</a>
             <a href="/refer-cases"><i class="bi bi-arrow-repeat me-2"></i>Refer Cases</a>
             <a href="/history"><i class="bi bi-clock-history me-2"></i>History</a>
@@ -61,7 +61,7 @@
                                     <c:forEach var="v" items="${visits}" varStatus="loop">
                                         <tr onclick="updateProfile(
                                                 '${v.patient.name}', 
-                                                '${v.doctor}', 
+                                                '${v.doctorName}', 
                                                 '${v.patient.phone}', 
                                                 '${v.patient.address}', 
                                                 '${v.visitTime}', 
@@ -104,26 +104,28 @@
                 </div>
 
                 <!-- Patient Profile -->
-                <div class="col-md-4">
-                    <div class="card-box text-center p-4">
-                        <h5 class="mb-4">Patient Profile</h5>
-                        <div class="mx-auto rounded-circle overflow-hidden mb-3"
-                             style="width: 120px; height: 120px; background-color: #e0e0e0;">
-                            <img id="patientImg" src="/images/default-avatar.png" alt="Avatar" class="img-fluid"
-                                 style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
-                        <p class="fw-bold" id="doctorName">Admitted by: —</p>
-                        <div class="text-start">
-                            <p><strong>Aadhar ID:</strong> <span id="aadharId">—</span></p>
-                            <p><strong>Patient ID:</strong> <span id="patientId">—</span></p>
-                            <p><strong>DOB:</strong> <span id="dob">—</span></p>
-                            <p><strong>Phone:</strong> <span id="phone">—</span></p>
-                            <p><strong>Address:</strong> <span id="address">—</span></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<div class="col-md-4">
+    <div class="card-box text-center p-4">
+        <h5 class="mb-4">Patient Profile</h5>
+        <div class="mx-auto rounded-circle overflow-hidden mb-3"
+             style="width: 120px; height: 120px; background-color: #e0e0e0;">
+            <img id="patientImg" src="/images/default-avatar.png" alt="Avatar" class="img-fluid"
+                 style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+         <h6 id="patientName" class="fw-bold mb-1">—</h6>
+        <p class="fw-bold" id="doctorName">Admitted by: —</p>
+        <div class="text-start mb-3">
+            <p><strong>Aadhar ID:</strong> <span id="aadharId">—</span></p>
+            <p><strong>Patient ID:</strong> <span id="patientId">—</span></p>
+            <p><strong>DOB:</strong> <span id="dob">—</span></p>
+            <p><strong>Phone:</strong> <span id="phone">—</span></p>
+            <p><strong>Address:</strong> <span id="address">—</span></p>
+        </div>
+
+        <!-- View Full Records Button -->
+        <a id="viewDetailsBtn" href="#" class="btn btn-outline-primary w-100">
+            <i class="bi bi-journal-text me-1"></i> View Full Records
+        </a>
     </div>
 </div>
 
@@ -136,15 +138,17 @@
        return "XXXX XXXX " + last4;
 }
 
-    function updateProfile(name, doctor, phone, address, visitTime,
+    function updateProfile(name, doctorName, phone, address, visitTime,
                            patientId, gender, caseType, dob, aadharId, imageUrl) {
-        document.getElementById("doctorName").innerText = "Admitted by: Dr. " + doctor;
+        document.getElementById("doctorName").innerText = "Admitted by: Dr. " + doctorName;
+        document.getElementById("patientName").innerText = name;
         document.getElementById("phone").innerText = phone;
         document.getElementById("address").innerText = address;
         document.getElementById("patientId").innerText = "RM" + (100000 + parseInt(patientId));
         document.getElementById("dob").innerText = dob && dob !== 'null' ? dob : '—';
         document.getElementById("aadharId").innerText = aadharId || '—';
         document.getElementById("patientImg").src = imageUrl || '/images/default-avatar.png';
+        document.getElementById("viewDetailsBtn").href = "/patient/records/" + patientId;
     }
 </script>
 

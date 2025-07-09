@@ -33,4 +33,19 @@ public class VisitService {
     public List<Visit> getAllVisits() {
         return visitRepo.findAll();
     }
+    
+    
+    
+    
+ // ✅ Add this method
+    public Visit getLatestVisitByPatientId(Long patientId) {
+        return visitRepo.findTopByPatientIdOrderByIdDesc(patientId);
+    }
+
+
+
+    // ✅ New: Fetch a visit by its ID
+    public Visit getVisitById(Long visitId) {
+        return visitRepo.findById(visitId).orElse(null);
+    }
 }

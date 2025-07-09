@@ -1,7 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.time.LocalDateTime" %>
-<%@ page import="com.swasthopd.model.User" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
@@ -17,7 +16,7 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" href="/css/dashboard.css">
-    <link rel="stylesheet" href="/css/register-patient.css">
+    
 </head>
 <body>
 <div class="container-fluid">
@@ -26,8 +25,8 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
         <nav class="col-md-2 sidebar d-flex flex-column p-3">
             <h4 class="text-center mb-4">SWASTH OPD+</h4>
             <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-            <a href="/register-patient" class="active"><i class="bi bi-person-plus me-2"></i> Add Patient</a>
-            <a href="/view-patients"><i class="bi bi-people me-2"></i> View Patients</a>
+            <a href="/patient/register-patient" class="active"><i class="bi bi-person-plus me-2"></i> Add Patient</a>
+            <a href="/patient/view-patients"><i class="bi bi-people me-2"></i> View Patients</a>
             <a href="/lab-reports"><i class="bi bi-flask me-2"></i> Lab Reports</a>
             <a href="/refer-cases"><i class="bi bi-arrow-repeat me-2"></i> Refer Cases</a>
             <a href="/history"><i class="bi bi-clock-history me-2"></i> History</a>
@@ -38,49 +37,77 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
         <main class="col-md-10 p-4">
             <h4 class="mb-4">New Patient Registration</h4>
 
-            <!-- Registration Form -->
-            <form action="/register-patient" method="post" enctype="multipart/form-data">
+            <form action="/patient/register-patient" method="post" enctype="multipart/form-data">
                 <div class="row g-4">
 
-                    <!-- Patient Info -->
-                    <div class="col-md-6 form-floating">
-                        <input type="text" name="name" id="name" class="form-control" placeholder="Patient Name" required>
-                        <label for="name">Patient Name</label>
+                
+                   <!-- ================== Patient Info ================== -->
+<h5>Patient Information</h5>
+
+<div class="col-md-6 form-floating">
+    <input type="text" name="aadharId" id="aadharId" class="form-control"
+           placeholder="Aadhar ID" required maxlength="12" value="${patient.aadharId}">
+    <label for="aadharId">Aadhar ID</label>
+</div>
+
+<div class="col-md-6 form-floating">
+    <input type="text" name="name" id="name" class="form-control"
+           placeholder="Patient Name" required value="${patient.name}">
+    <label for="name">Patient Name</label>
+</div>
+
+<div class="col-md-6 form-floating">
+    <input type="date" name="dob" id="dob" class="form-control"
+           placeholder="Date of Birth" required value="${patient.dob}">
+    <label for="dob">Date of Birth</label>
+</div>
+
+<!-- Hidden age field to send to backend -->
+<input type="hidden" name="age" id="ageHidden" value="${patient.age}">
+<div class="col-md-6 mt-2">
+    <span id="ageDisplay" class="text-muted small">
+        <c:if test="${not empty patient.age}">Age: ${patient.age} yrs</c:if>
+    </span>
+</div>
+
+<div class="col-md-6 form-floating">
+    <select name="gender" id="gender" class="form-select" required>
+        <option value="" disabled ${empty patient.gender ? 'selected' : ''}>Select Gender</option>
+        <option value="Male" ${patient.gender == 'Male' ? 'selected' : ''}>Male</option>
+        <option value="Female" ${patient.gender == 'Female' ? 'selected' : ''}>Female</option>
+        <option value="Other" ${patient.gender == 'Other' ? 'selected' : ''}>Other</option>
+    </select>
+    <label for="gender">Gender</label>
+</div>
+
+<div class="col-md-6 form-floating">
+    <input type="text" name="address" id="address" class="form-control"
+           placeholder="Address" required value="${patient.address}">
+    <label for="address">Address</label>
+</div>
+
+<div class="col-md-6 form-floating">
+    <input type="text" name="phone" id="phone" class="form-control"
+           placeholder="Phone" required value="${patient.phone}">
+    <label for="phone">Phone</label>
+</div>
+                   
+
+                    <div class="col-md-6">
+                        <label class="form-label mt-2">Patient Image (optional)</label>
+                        <input type="file" name="imageFile" class="form-control">
                     </div>
 
-                    <div class="col-md-3 form-floating">
-                        <input type="number" name="age" id="age" class="form-control" placeholder="Age" required>
-                        <label for="age">Age</label>
-                    </div>
+                    <!-- ================== Visit Info ================== -->
+                    <h5 class="mt-4">Visit Information</h5>
 
-                    <div class="col-md-3 form-floating">
-                        <select name="gender" id="gender" class="form-select" required>
-                            <option value="" disabled selected>Select Gender</option>
-                            <option>Male</option>
-                            <option>Female</option>
-                            <option>Other</option>
-                        </select>
-                        <label for="gender">Gender</label>
-                    </div>
-
-                    <div class="col-md-6 form-floating">
-                        <input type="text" name="address" id="address" class="form-control" placeholder="Address" required>
-                        <label for="address">Address</label>
-                    </div>
-
-                    <div class="col-md-6 form-floating">
-                        <input type="text" name="phone" id="phone" class="form-control" placeholder="Phone" required>
-                        <label for="phone">Phone</label>
-                    </div>
-
-                    <!-- Visit Info -->
                     <div class="col-md-6 form-floating">
                         <input type="text" class="form-control" value="<%= visitTime %>" readonly>
                         <label>Visit Time</label>
                     </div>
 
                     <div class="col-md-6 form-floating">
-                        <input type="text" name="symptoms" id="symptoms" class="form-control" placeholder="Symptoms">
+                        <input type="text" name="symptoms" id="symptoms" class="form-control" placeholder="Symptoms" required>
                         <label for="symptoms">Symptoms</label>
                     </div>
 
@@ -95,32 +122,28 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
 
                     <div class="col-md-6 form-floating">
                         <select name="department" id="department" class="form-select" required>
-                            <option>General</option>
-                            <option>ENT</option>
-                            <option>Ortho</option>
+                             <option>General</option>
+                             <option>ENT</option>
+                             <option>Ortho</option>
+                             <option>Cardiology</option>
+                             <option>Neurology</option>
+                             <option>Gynecology</option>
+                             <option>Pediatrics</option>
+                             <option>Urology</option>
+                             <option>Oncology</option>
+                             <option>Pulmonology</option>
+                             <option>Dermatology</option>
+                             <option>Ophthalmology</option>
+                             <option>Psychiatry</option>
+                             <option>Gastroenterology</option>
+                             <option>Nephrology</option>	
                         </select>
                         <label for="department">Department</label>
                     </div>
 
                     <div class="col-md-6 form-floating">
-                        <input type="text" name="doctor" id="doctor" class="form-control" placeholder="Doctor Name" required>
-                        <label for="doctor">Doctor</label>
-                    </div>
-
-                    <!-- Identity -->
-                    <div class="col-md-6 form-floating">
-                        <input type="text" name="aadharId" id="aadharId" class="form-control" placeholder="Aadhar ID">
-                        <label for="aadharId">Aadhar ID</label>
-                    </div>
-
-                    <div class="col-md-6 form-floating">
-                        <input type="date" name="dob" id="dob" class="form-control" placeholder="Date of Birth">
-                        <label for="dob">Date of Birth</label>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label mt-2">Patient Image (optional)</label>
-                        <input type="file" name="imageFile" class="form-control">
+                        <input type="text" name="doctorName" id="doctorName" class="form-control" placeholder="Doctor Name" required>
+                        <label for="doctorName">Doctor</label>
                     </div>
                 </div>
 
@@ -135,10 +158,10 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
             <div class="mt-5">
                 <h5>Recently Registered Patients</h5>
                 <ul class="list-group">
-                    <c:forEach var="v" items="${recentVisits}">
+                    <c:forEach var="v" items="${recentPatients}">
                         <li class="list-group-item d-flex justify-content-between">
-                            <span>${v.patient.name}</span>
-                            <span>${v.visitTime}</span>
+                            <span>${v.name}</span>
+                            <span>${v.createdAt}</span>
                         </li>
                     </c:forEach>
                 </ul>
@@ -146,49 +169,73 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
         </main>
     </div>
 </div>
+
 <script>
-document.getElementById("aadharId").addEventListener("blur", function () {
-    const aadhar = this.value.trim();
+    // Auto-fill fields if aadhar already exists
+    document.getElementById("aadharId").addEventListener("blur", function () {
+        const aadhar = this.value.trim();
+        if (aadhar.length === 12) {
+            fetch(`/patient/aadhar/` + aadhar)
+                .then(response => {
+                    if (!response.ok) throw new Error("Not found");
+                    return response.json();
+                })
+                .then(patient => {
+                    if (patient) {
+                        document.getElementById("name").value = patient.name;
+                        document.getElementById("dob").value = patient.dob;
+                        document.getElementById("gender").value = patient.gender;
+                        document.getElementById("address").value = patient.address;
+                        document.getElementById("phone").value = patient.phone;
 
-    if (aadhar.length === 12) {
-        fetch(`/patient/aadhar/${aadhar}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Not found");
-                return response.json();
-            })
-            .then(patient => {
-                if (patient) {
-                    // Fill fields with existing data
-                    document.getElementById("name").value = patient.name;
-                    document.getElementById("age").value = patient.age;
-                    document.getElementById("gender").value = patient.gender;
-                    document.getElementById("address").value = patient.address;
-                    document.getElementById("phone").value = patient.phone;
-                    document.getElementById("dob").value = patient.dob;
+                        ["name", "dob", "gender", "address", "phone"].forEach(id => {
+                            document.getElementById(id).readOnly = true;
+                            document.getElementById(id).classList.add("bg-light");
+                        });
 
-                    // Make read-only
-                    ["name", "age", "gender", "address", "phone", "dob"].forEach(id => {
-                        document.getElementById(id).readOnly = true;
-                        document.getElementById(id).classList.add("bg-light");
+                        alert("Existing patient found. New visit will be recorded.");
+                    }
+                })
+                .catch(err => {
+                    ["name", "dob", "gender", "address", "phone"].forEach(id => {
+                        const field = document.getElementById(id);
+                        field.readOnly = false;
+                        field.classList.remove("bg-light");
+                        field.value = "";
                     });
-
-                    // Inform the user
-                    alert("Existing patient found. Creating new visit only.");
-                }
-            })
-            .catch(err => {
-                console.log("No existing patient found.");
-                // Clear fields and allow input
-                ["name", "age", "gender", "address", "phone", "dob"].forEach(id => {
-                    const field = document.getElementById(id);
-                    field.value = "";
-                    field.readOnly = false;
-                    field.classList.remove("bg-light");
                 });
-            });
+        }
+    });
+
+    // Calculate age from DOB
+    document.getElementById("dob").addEventListener("change", function () {
+        const dob = new Date(this.value);
+        const today = new Date();
+        let age = today.getFullYear() - dob.getFullYear();
+        const m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        document.getElementById("ageDisplay").innerText = "Age: " + age + " yrs";
+        document.getElementById("ageHidden").value = age;
+    });
+
+    // Auto-fill aadhar if coming from dashboard
+   window.addEventListener("load", function () {
+    const aadhar = sessionStorage.getItem("searchAadhar");
+    if (aadhar && aadhar.length === 12) {
+        const input = document.getElementById("aadharId");
+        if (input) {
+            input.value = aadhar;
+            sessionStorage.removeItem("searchAadhar");
+
+            // Delay to ensure input is rendered
+            setTimeout(() => {
+                input.dispatchEvent(new Event("blur"));
+            }, 100);
+        }
     }
 });
 </script>
-
 </body>
 </html>

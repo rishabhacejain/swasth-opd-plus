@@ -8,12 +8,20 @@ import jakarta.persistence.*;
 @Table(name="doctor")
 public class Doctor {
 	
-	  @Id
+	   @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    @Column(name="DocID")
 	    private int docID;
 
-	    @Column(name="name")
+	    public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+		@Column(name="name")
 	    private String name;
 
 	    @Column(name="email")
