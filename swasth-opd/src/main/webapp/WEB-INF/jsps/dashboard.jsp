@@ -5,6 +5,7 @@
 <%@ page import="java.time.*"%>
 <%@ page import="java.time.format.DateTimeFormatter"%>
 
+
 <%
     User doctor = (User) request.getAttribute("doctor");
     List<Visit> visits = (List<Visit>) request.getAttribute("visits");
@@ -44,19 +45,11 @@
 </head>
 
 <body>
+<div class="wrapper">
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="col-md-2 sidebar d-flex flex-column">
-            <h4 class="text-center my-4">SWASTH OPD+</h4>
-            <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-            <a href="/patient/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
-            <a href="/patient/view-patients"><i class="bi bi-people-fill me-2"></i> View Patients</a>
-            <a href="/patient/lab-request"><i class="bi bi-cloud-arrow-down me-2"></i>Lab Requests</a>
-            <a href="/patient/refer-patient"><i class="bi bi-arrow-right-circle me-2"></i>Referrals</a>
-            <a href="/patient/history"><i class="bi bi-clock-history me-2"></i>History</a>
-            <a href="/logout" class="mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
-        </nav>
+         <jsp:include page="/WEB-INF/jsps/fragments/sidebar.jsp" />
 
         <!-- Main Content -->
         <main class="col-md-10 p-4">
@@ -195,6 +188,7 @@
         </main>
     </div>
 </div>
+</div>
 
 <script>
 function searchByAadhar() {
@@ -237,5 +231,7 @@ function registerVisit() {
     window.location.href = "/patient/register-patient";
 }
 </script>
+<script src="/js/script.js"></script>
+
 </body>
 </html>

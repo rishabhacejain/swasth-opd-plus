@@ -1,110 +1,147 @@
+/* ========== Base Styling ========== */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(to bottom right, #e0f0ff, #f5fafe);
+    background: linear-gradient(to bottom right, #1a1a2e, #2c2c48);
     height: 100vh;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column; /* For navbar, main content, and footer stacking */
+    overflow: hidden; /* Prevent body scroll by default, handled by main-content */
+    position: relative; /* For fixed footer */
 }
 
-.login-wrapper {
+/* ========== Navbar ========== */
+.navbar {
+    background-color: #1a1a2e;
+    padding: 15px 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: flex;
+    justify-content: center; /* Center content horizontally */
+    align-items: center;
+    color: white;
     width: 100%;
-    max-width: 1000px;
-    margin: auto;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    box-sizing: border-box;
+    z-index: 100; /* Ensure it's on top */
 }
 
-.login-card {
-    display: flex;
-    background: #fff;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-    border-radius: 15px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 900px;
-    flex-direction: row;
-}
-
-.illustration {
-    background: #f0f8ff;
-    padding: 30px;
-    width: 45%;
+.navbar-logo {
     display: flex;
     align-items: center;
-    justify-content: center;
-}
-
-.illustration img {
-    max-width: 100%;
-    height: auto;
-}
-
-.login-form {
-    padding: 40px;
-    width: 55%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.login-form h2 {
-    margin-bottom: 25px;
+    font-size: 24px; /* Larger logo text */
     font-weight: 600;
-    font-size: 26px;
-    color: #333;
 }
 
+.navbar-logo img {
+    height: 40px; /* Adjust logo size */
+    margin-right: 15px;
+    /* If your hospital-illustration.png is already white/transparent, remove filter */
+    /* filter: brightness(0) invert(1); */ /* Uncomment if logo needs to be white */
+}
+
+/* ========== Main Content Area ========== */
+.main-content {
+    flex-grow: 1; /* Takes up all available space between navbar and footer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-y: auto; /* Allow main content area to scroll if needed */
+}
+
+.login-container {
+    display: flex;
+    background: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-radius: 16px;
+    overflow: hidden;
+    width: 90%; /* Adjust overall width */
+    max-width: 1000px; /* Adjusted max-width for the split layout */
+    min-height: 550px; /* Increased minimum height for the container */
+    height: auto; /* Allow height to adjust based on content */
+    margin-bottom: 34px;
+}
+
+/* ========== Left Part of Form (Fields + Buttons) ========== */
+.login-form-left {
+    flex: 1; /* Takes available space */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    border-right: 1px solid #eee; /* Separator line */
+    min-width: 300px; /* Ensure a minimum width */
+    align-items: center; /* Center form elements within this div */
+}
+
+.login-form-left h2 {
+    margin-bottom: 30px;
+    font-weight: 700; /* Bolder heading */
+    font-size: 32px; /* Larger heading */
+    color: #1a1a2e;
+    text-align: center;
+    width: 100%; /* Ensure heading respects centering */
+}
+
+.login-form-left form {
+    width: 100%;
+    max-width: 380px; /* Limit the form width to match inputs */
+}
+
+/* Form Elements (common styles) */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px; /* More space between groups */
+    width: 100%; /* Ensure form group takes full width of its parent (max-width constrained by form) */
 }
 
 label {
     display: block;
-    font-size: 14px;
-    margin-bottom: 6px;
+    font-size: 15px; /* Slightly larger label */
+    margin-bottom: 8px;
     color: #333;
     font-weight: 500;
 }
 
 .input-icon {
     position: relative;
+    width: 100%; /* Take full width of form-group */
 }
 
 .input-icon i {
     position: absolute;
-    top: 10px;
-    left: 10px;
-    color: #aaa;
+    top: 50%;
+    left: 15px;
+    transform: translateY(-50%);
+    color: #888;
+    font-size: 18px;
 }
 
 .input-icon input {
-    width: 100%;
-    padding: 10px 10px 10px 35px;
-    font-size: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+    width: 85%; /* Fixed: Input takes 100% of its parent (.input-icon) */
+    padding: 14px 14px 14px 45px; /* Increased padding */
+    font-size: 16px; /* Larger input font */
+    border: 1px solid #ddd;
+    border-radius: 10px;
     outline: none;
-    transition: border 0.3s;
+    transition: border 0.3s, box-shadow 0.3s;
 }
 
 .input-icon input:focus {
     border-color: #007bff;
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2); /* More prominent shadow on focus */
 }
-
-
 
 .forgot-link {
     text-align: right;
-    margin-top: 5px;
+    margin-top: 10px;
+    width: 100%; /* Match parent width */
 }
 
 .forgot-link a {
-    font-size: 13px;
+    font-size: 14px;
     color: #007bff;
     text-decoration: none;
 }
@@ -114,124 +151,305 @@ label {
 }
 
 .login-btn {
-    background-color: #007bff;
+    background-color: #007bff; /* Primary blue button */
     color: white;
-    padding: 12px;
-    width: 100%;
+    padding: 16px;
+    width: 100%; /* Fixed: Button takes 100% of its parent (form, which has max-width) */
     border: none;
-    font-size: 16px;
+    font-size: 17px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s;
+    margin-top: 25px; /* More space above button */
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 .login-btn:hover {
     background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
+.login-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Alerts */
+.alert {
+    padding: 15px;
+    font-size: 15px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    font-weight: 500;
+    text-align: center;
+    width: 100%; /* Ensure alert takes full width of form parent */
+    max-width: 380px; /* Match form max-width */
+    box-sizing: border-box; /* Include padding in width */
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* Signup Link */
 .signup-link {
     text-align: center;
-    margin-top: 15px;
-    font-size: 14px;
-    color: #444;
+    margin-top: 25px;
+    font-size: 15px;
+    color: #555;
+    width: 100%; /* Match parent width */
 }
 
 .signup-link a {
     color: #007bff;
     text-decoration: none;
+    font-weight: 600;
 }
 
 .signup-link a:hover {
     text-decoration: underline;
 }
 
-footer {
-    margin-top: 20px;
-    text-align: center;
-    font-size: 13px;
-    color: #888;
+/* ========== Right Part of Form (Role Selection) ========== */
+.role-selection-right {
+    flex: 1; /* Takes available space */
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; /* Center role cards horizontally */
+    box-sizing: border-box;
 }
 
-/* Role Selection Cards */
+.role-selection-right > label { /* Target the specific label in this div */
+    font-size: 20px; /* Larger label for "Login as:" */
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #1a1a2e;
+}
+
 .role-card-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 10px;
+    display: grid; /* Use CSS Grid for better control over card layout */
+    grid-template-columns: repeat(2, 1fr); /* Fixed: 2 columns, equal width */
+    gap: 20px; /* Fixed: Space between grid items */
+    width: 100%;
+    max-width: 400px; /* Limit the width of the grid of cards */
+    justify-items: center; /* Center cards within their grid cells */
+    align-items: center; /* Center cards vertically within their grid cells */
 }
 
 .role-card {
-    flex: 1 1 45%;
-    min-width: 120px;
-    max-width: 160px;
-    background-color: #ffffff;
-    border: 2px solid #ccc;
-    border-radius: 12px;
-    padding: 15px;
+    background-color: #f9f9f9;
+    border: 2px solid #e0e0e0;
+    border-radius: 18px; /* More rounded */
+    padding: 20px; /* More padding */
     text-align: center;
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    width: 100%; /* Take full width of grid cell */
+    min-height: 140px; /* Fixed: Minimum height for cards to prevent collapse */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box; /* Include padding in width/height */
+}
+
+.role-card:hover:not(.selected) {
+    border-color: #a0cfff;
+    box-shadow: 0 6px 16px rgba(0, 123, 255, 0.15);
+    transform: translateY(-5px); /* More pronounced lift */
 }
 
 .role-card img {
-    width: 60px;
-    height: 60px;
+    width: 65px; /* Larger icons */
+    height: 65px;
     object-fit: contain;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
 .role-card span {
     display: block;
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+    color: #444;
 }
 
-/* Checkmark (hidden by default) */
 .checkmark {
     position: absolute;
-    bottom: -10px;
+    bottom: -15px; /* Adjust position */
     left: 50%;
     transform: translateX(-50%);
     background-color: white;
     color: #007bff;
     border-radius: 50%;
-    font-size: 20px;
+    font-size: 25px; /* Larger checkmark */
     display: none;
+    border: 3px solid #007bff; /* Thicker border */
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+    padding: 2px; /* Small padding inside checkmark */
 }
 
-/* Selected State */
 .role-card.selected {
     border-color: #007bff;
-    box-shadow: 0 0 12px rgba(0, 123, 255, 0.3);
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
+    background-color: #e6f2ff;
+    transform: translateY(-2px); /* Slight lift for selected */
 }
 
 .role-card.selected .checkmark {
     display: block;
 }
 
-/* Mobile adjustments */
-@media (max-width: 576px) {
-    .role-card {
-        flex: 1 1 100%;
+/* ========== Footer ========== */
+footer {
+    position: fixed; /* Keep fixed to bottom */
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #ffffff;
+    background: rgba(0, 0, 0, 0.3); /* Slightly darker transparent background */
+    z-index: 99; /* Below navbar */
+    box-sizing: border-box;
+}
+
+/* ========== Responsive Design ========== */
+@media (max-width: 992px) { /* Tablet / Smaller desktop */
+    .login-container {
+        flex-direction: column; /* Stack form parts vertically */
+        max-width: 600px; /* Adjust max width for stacked layout */
+        height: auto; /* Auto height when stacked */
+        min-height: unset; /* Remove min-height */
+    }
+
+    .login-form-left {
+        border-right: none; /* Remove vertical separator */
+        border-bottom: 1px solid #eee; /* Add horizontal separator */
+        padding-bottom: 30px; /* Add padding at bottom */
+    }
+
+    .role-selection-right {
+        padding-top: 30px; /* Add padding at top */
+    }
+
+    .navbar-logo {
+        font-size: 20px; /* Smaller logo text on smaller screens */
+    }
+
+    /* Adjust main-content to allow scrolling only when needed on smaller screens */
+    .main-content {
+        overflow-y: auto;
+        align-items: flex-start; /* Align content to top when stacked */
+    }
+
+    body {
+        overflow-y: auto; /* Allow body scroll on smaller screens if content is long */
+    }
+
+    footer {
+        position: static; /* Fixed footer might cover content on small stacked layouts */
+        padding: 10px 0;
+        background: #1a1a2e; /* Solid background on mobile */
     }
 }
 
-
-/* Responsive */
-@media (max-width: 768px) {
-    .login-card {
-        flex-direction: column;
+@media (max-width: 768px) { /* Mobile screens */
+    .navbar {
+        padding: 10px 20px;
     }
 
-    
+    .navbar-logo img {
+        height: 30px; /* Smaller logo */
+        margin-right: 10px;
+    }
 
-    .login-form {
+    .login-form-left h2 {
+        font-size: 28px; /* Adjust heading size */
+        margin-bottom: 25px;
+    }
+
+    .login-form-left, .role-selection-right {
+        padding: 25px; /* Reduced padding */
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .input-icon input {
+        padding: 12px 12px 12px 40px; /* Adjust padding */
+        font-size: 15px;
+    }
+
+    .login-btn {
+        padding: 14px;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .role-selection-right > label {
+        font-size: 18px;
+        margin-bottom: 25px;
+    }
+
+    .role-card-group {
+        /* Fixed: Ensure cards wrap nicely */
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); /* Adjusted minmax for better wrap */
+        gap: 15px;
+        max-width: 100%; /* Take full width of parent */
+    }
+
+    .role-card {
+        padding: 15px;
+        min-height: 120px; /* Adjust card height */
+        border-radius: 15px;
+    }
+
+    .role-card img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .role-card span {
+        font-size: 13px;
+    }
+
+    .checkmark {
+        bottom: -10px;
+        font-size: 22px;
+        border-width: 2px;
+    }
+}
+
+@media (max-width: 480px) {
+    .login-form-left h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+    .login-form-left, .role-selection-right {
+        padding: 20px;
+    }
+    .role-card-group {
+        grid-template-columns: 1fr; /* Single column for very small screens */
+        max-width: 200px; /* Limit width for single column cards */
+    }
+    .role-card {
+        height: auto; /* Auto height when stacked vertically */
         width: 100%;
-        padding: 30px;
     }
 }

@@ -40,7 +40,7 @@ public class LoginController {
     		switch(role.toUpperCase()) {
     		case "DOCTOR": return "redirect:/dashboard";
     		case "NURSE": return "redirect:/nurse-dashboard";
-    		case "LAB":   return "redirect:/lab-dashboard";
+    		case "LAB":   return "redirect:/lab/requests";
     		case "ADMIN": return "redirect:/admin/panel";
     		default: return "redirect:/login";
 
@@ -56,6 +56,13 @@ public class LoginController {
     	
     	
     }
+	
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+	    session.invalidate(); // Destroys session
+	    return "redirect:/login?logout"; // Redirect to login with optional flag
+	}
+
 	
 
 }

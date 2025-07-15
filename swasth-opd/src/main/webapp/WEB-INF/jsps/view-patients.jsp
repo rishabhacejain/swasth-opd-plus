@@ -17,20 +17,14 @@
     <link rel="stylesheet" href="/css/view-patient.css">
 </head>
 <body>
+<div class="wrapper">
 <div class="container-fluid">
     <div class="row">
-        <!-- Sidebar -->
-        <nav class="col-md-2 sidebar d-flex flex-column">
-            <h4 class="text-center my-4">SWASTH OPD+</h4>
-            <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
-            <a href="/patient/register-patient"><i class="bi bi-person-plus me-2"></i>Register Patient</a>
-            <a href="/patient/view-patients" class="active"><i class="bi bi-people-fill me-2"></i>View Patients</a>
-            <a href="/lab-reports"><i class="bi bi-flask me-2"></i>Lab Reports</a>
-            <a href="/refer-cases"><i class="bi bi-arrow-repeat me-2"></i>Refer Cases</a>
-            <a href="/history"><i class="bi bi-clock-history me-2"></i>History</a>
-            <a href="/logout" class="mt-auto"><i class="bi bi-box-arrow-right me-2"></i>Logout</a>
-        </nav>
-
+	        
+	    <!-- Sidebar -->
+         <jsp:include page="/WEB-INF/jsps/fragments/sidebar.jsp" />
+         
+         
         <!-- Main Content -->
         <main class="col-md-10 p-4">
             <div class="d-flex justify-content-between align-items-center mb-4">
@@ -87,6 +81,7 @@
                                 </tbody>
                             </table>
                         </div>
+                       
 
                         <!-- Pagination (Optional) -->
                         <div class="mt-auto">
@@ -126,8 +121,14 @@
         <a id="viewDetailsBtn" href="#" class="btn btn-outline-primary w-100">
             <i class="bi bi-journal-text me-1"></i> View Full Records
         </a>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
     </div>
 </div>
+
 
 <!-- JS for Profile Update -->
 <script>
@@ -153,5 +154,6 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

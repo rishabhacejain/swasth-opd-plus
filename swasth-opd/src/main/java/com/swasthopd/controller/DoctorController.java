@@ -7,10 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
+import com.swasthopd.model.LabRequest;
 import com.swasthopd.model.Patient;
 import com.swasthopd.model.User;
 import com.swasthopd.model.Visit;
+import com.swasthopd.service.LabRequestService;
 import com.swasthopd.service.PatientService;
 import com.swasthopd.service.VisitService;
 
@@ -21,6 +22,9 @@ public class DoctorController {
 	
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired
+	private LabRequestService labRequestService;
 
 	
 //	 @GetMapping	("/dashboard")
@@ -41,6 +45,18 @@ public class DoctorController {
 
 	     return "dashboard";
 	 }
+	 
+	 
+	 @GetMapping("/lab-reports")
+	 public String viewDoctorReports(Model model, HttpSession session) {
+	     User doctor = (User) session.getAttribute("loggedInUser");
+	     if (doctor == null) return "redirect:/login";
+
+	     List<LabRequest> reports = labRequestService.getReportsForDoctor(doctor.getName());
+	     model.addAttribute("reports", reports);
+	     return "lab-reports";
+	 }
+
 
 
 }

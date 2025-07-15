@@ -19,19 +19,11 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
     
 </head>
 <body>
+<div class="wrapper">
 <div class="container-fluid">
     <div class="row">
         <!-- Sidebar -->
-        <nav class="col-md-2 sidebar d-flex flex-column p-3">
-            <h4 class="text-center mb-4">SWASTH OPD+</h4>
-            <a href="/dashboard"><i class="bi bi-speedometer2 me-2"></i> Dashboard</a>
-            <a href="/patient/register-patient" class="active"><i class="bi bi-person-plus me-2"></i> Add Patient</a>
-            <a href="/patient/view-patients"><i class="bi bi-people me-2"></i> View Patients</a>
-            <a href="/lab-reports"><i class="bi bi-flask me-2"></i> Lab Reports</a>
-            <a href="/refer-cases"><i class="bi bi-arrow-repeat me-2"></i> Refer Cases</a>
-            <a href="/history"><i class="bi bi-clock-history me-2"></i> History</a>
-            <a href="/logout" class="mt-auto"><i class="bi bi-box-arrow-right me-2"></i> Logout</a>
-        </nav>
+         <jsp:include page="/WEB-INF/jsps/fragments/sidebar.jsp" />
 
         <!-- Main Content -->
         <main class="col-md-10 p-4">
@@ -169,7 +161,7 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
         </main>
     </div>
 </div>
-
+</div>
 <script>
     // Auto-fill fields if aadhar already exists
     document.getElementById("aadharId").addEventListener("blur", function () {
@@ -237,5 +229,6 @@ String visitTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM
     }
 });
 </script>
+<script src="/js/script.js"></script>
 </body>
 </html>

@@ -23,8 +23,10 @@ import com.swasthopd.model.Visit;
 import com.swasthopd.service.DoctorService;
 import com.swasthopd.service.PatientService;
 	import com.swasthopd.service.VisitService;
-	
-	import jakarta.servlet.http.HttpSession;
+import com.swasthopd.util.ExcelExporter;
+
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 	
 	@Controller
 	@RequestMapping("/patient")
@@ -251,6 +253,35 @@ import com.swasthopd.service.PatientService;
 	    }
 
 
+
+	 // Inside PatientController.java
+
+	    @GetMapping("/history")
+	    public String showAllPatientHistory(Model model, HttpSession session) {
+	        Object user = session.getAttribute("loggedInUser");
+	        if (user == null) {
+	            return "redirect:/login";
+	        }
+
+	        List<Visit> allVisits = visitService.getAllVisits();  // or a paginated version
+	        model.addAttribute("visits", allVisits);
+
+	        return "patient-history";  // This should be your JSP view file
+	    }
+	    
+	    @GetMapping("/export/excel")
+	    public void exportToExcel(HttpServletResponse response) throws IOException {
+	        response.setContentType("application/octet-stream");
+
+	        String headerKey = "Content-Disposition";
+	        String headerValue = "attachment; filename=patient_visit_history.xlsx";
+	        response.setHeader(headerKey, headerValue);
+
+	        List<Visit> visits = visitService.getAllVisits();
+
+	        ExcelExporter exporter = new ExcelExporter(visits);
+	        exporter.export(response);
+	    }
 
 	
 	}
